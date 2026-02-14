@@ -1,0 +1,161 @@
+project_id = "qqeyfkoxenmkxrttgndt"
+
+[functions.create-checkout]
+enabled = true
+verify_jwt = false
+
+[functions.check-subscription]
+enabled = true
+verify_jwt = false
+
+[functions.customer-portal]
+enabled = true
+verify_jwt = false
+
+[functions.workflow-hazard-extractor]
+enabled = true
+verify_jwt = false
+
+[functions.workflow-requirement-extractor]
+enabled = true
+verify_jwt = false
+
+[functions.workflow-final-apply]
+enabled = true
+verify_jwt = false
+
+[functions.workflow-test-generator]
+enabled = true
+verify_jwt = false
+
+[functions.workflow-conformance-generator]
+enabled = true
+verify_jwt = false
+
+[functions.workflow-traceability-engine]
+enabled = true
+verify_jwt = false
+
+[functions.workflow-document-processor]
+enabled = true
+verify_jwt = false
+
+[functions.workflow-orchestrator]
+enabled = true
+verify_jwt = false
+
+[functions.proactive-agent-analysis]
+enabled = true
+verify_jwt = false
+
+[functions.certification-agent]
+enabled = true
+verify_jwt = false
+
+[functions.generate-checklist-items]
+enabled = true
+verify_jwt = false
+
+[functions.generate-report]
+enabled = true
+verify_jwt = false
+
+[functions.generate-quick-start]
+enabled = true
+verify_jwt = false
+
+[functions.validate-compliance]
+enabled = true
+verify_jwt = false
+
+[functions.recommend-test-cases]
+enabled = true
+verify_jwt = false
+
+[functions.recommend-requirement-links]
+enabled = true
+verify_jwt = false
+
+[functions.import-hazards]
+enabled = true
+verify_jwt = false
+
+[functions.import-export-requirements]
+enabled = true
+verify_jwt = false
+
+[functions.import-export-data]
+enabled = true
+verify_jwt = false
+
+[functions.generate-ce-from-document]
+enabled = true
+verify_jwt = false
+
+[functions.create-user]
+enabled = true
+verify_jwt = false
+
+[functions.reset-user-password]
+enabled = true
+verify_jwt = false
+
+[functions.analyze-document]
+enabled = true
+verify_jwt = false
+
+[functions.analyze-change-impact]
+enabled = true
+verify_jwt = false
+
+[functions.bulk-auto-link-hazards]
+enabled = true
+verify_jwt = false
+
+[functions.batch-validate-requirements]
+enabled = true
+verify_jwt = false
+
+[functions.recommend-controls]
+enabled = true
+verify_jwt = false
+
+[functions.nl-search]
+enabled = true
+verify_jwt = false
+
+[functions.gap-analysis]
+enabled = true
+verify_jwt = false
+
+[functions.predictive-risk]
+enabled = true
+verify_jwt = false
+
+[functions.extract-meeting-minutes]
+enabled = true
+verify_jwt = false
+
+[functions.api-gateway]
+enabled = true
+verify_jwt = false
+
+[functions.manage-api-keys]
+enabled = true
+verify_jwt = false
+
+[functions.manage-webhooks]
+enabled = true
+verify_jwt = false
+
+[functions.audited-delete]
+enabled = true
+verify_jwt = false
+
+[functions.stripe-webhook]
+enabled = true
+verify_jwt = false
+
+[functions.sync-platform-accounts]
+enabled = true
+verify_jwt = false
