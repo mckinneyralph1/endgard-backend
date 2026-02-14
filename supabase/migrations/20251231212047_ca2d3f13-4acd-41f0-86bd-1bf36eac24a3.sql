@@ -51,24 +51,34 @@ TO authenticated
 USING (public.user_has_project_access(auth.uid(), project_id::text));
 
 -- 3. Fix acceptance_decisions to use project access
-DROP POLICY IF EXISTS "Authenticated users can view acceptance decisions" ON public.acceptance_decisions;
-CREATE POLICY "Users can view acceptance decisions for accessible projects"
-ON public.acceptance_decisions FOR SELECT
-TO authenticated
-USING (public.user_has_project_access(auth.uid(), project_id::text));
+DO $$
+BEGIN
+  IF to_regclass('public.acceptance_decisions') IS NOT NULL THEN
+    DROP POLICY IF EXISTS "Authenticated users can view acceptance decisions" ON public.acceptance_decisions;
+    CREATE POLICY "Users can view acceptance decisions for accessible projects"
+    ON public.acceptance_decisions FOR SELECT
+    TO authenticated
+    USING (public.user_has_project_access(auth.uid(), project_id::text));
+  END IF;
+END $$;
 
 -- 4. Fix requirement_validation_history - needs to join through requirements table
-DROP POLICY IF EXISTS "Authenticated users can view validation history" ON public.requirement_validation_history;
-CREATE POLICY "Users can view validation history for accessible projects"
-ON public.requirement_validation_history FOR SELECT
-TO authenticated
-USING (
-  EXISTS (
-    SELECT 1 FROM public.requirements r 
-    WHERE r.id = requirement_validation_history.requirement_id 
-    AND public.user_has_project_access(auth.uid(), r.project_id)
-  )
-);
+DO $$
+BEGIN
+  IF to_regclass('public.requirement_validation_history') IS NOT NULL THEN
+    DROP POLICY IF EXISTS "Authenticated users can view validation history" ON public.requirement_validation_history;
+    CREATE POLICY "Users can view validation history for accessible projects"
+    ON public.requirement_validation_history FOR SELECT
+    TO authenticated
+    USING (
+      EXISTS (
+        SELECT 1 FROM public.requirements r
+        WHERE r.id = requirement_validation_history.requirement_id
+        AND public.user_has_project_access(auth.uid(), r.project_id)
+      )
+    );
+  END IF;
+END $$;
 
 -- 5. Fix calendar_events conflicting policies - remove overly permissive one
 DROP POLICY IF EXISTS "Authenticated users can view all calendar events" ON public.calendar_events;

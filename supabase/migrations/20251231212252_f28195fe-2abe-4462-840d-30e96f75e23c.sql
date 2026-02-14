@@ -29,10 +29,20 @@ TO authenticated
 USING (public.user_has_project_access(auth.uid(), project_id::text));
 
 -- 3. Fix acceptance_decisions - drop old policy with 'true' condition
-DROP POLICY IF EXISTS "Users can view acceptance decisions" ON public.acceptance_decisions;
+DO $$
+BEGIN
+  IF to_regclass('public.acceptance_decisions') IS NOT NULL THEN
+    DROP POLICY IF EXISTS "Users can view acceptance decisions" ON public.acceptance_decisions;
+  END IF;
+END $$;
 
 -- 4. Fix requirement_validation_history - drop old policy with 'true' condition  
-DROP POLICY IF EXISTS "Users can view validation history" ON public.requirement_validation_history;
+DO $$
+BEGIN
+  IF to_regclass('public.requirement_validation_history') IS NOT NULL THEN
+    DROP POLICY IF EXISTS "Users can view validation history" ON public.requirement_validation_history;
+  END IF;
+END $$;
 
 -- 5. Ensure requirement_templates have authenticated-only policies
 CREATE POLICY "Authenticated users can view requirement templates"
