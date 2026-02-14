@@ -32,7 +32,19 @@ CREATE INDEX IF NOT EXISTS idx_test_cases_created_at ON public.test_cases(create
 CREATE INDEX IF NOT EXISTS idx_certifiable_elements_project_id ON public.certifiable_elements(project_id);
 CREATE INDEX IF NOT EXISTS idx_certifiable_elements_parent_id ON public.certifiable_elements(parent_id);
 CREATE INDEX IF NOT EXISTS idx_certifiable_elements_status ON public.certifiable_elements(status);
-CREATE INDEX IF NOT EXISTS idx_certifiable_elements_display_order ON public.certifiable_elements(display_order);
+
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'certifiable_elements'
+      AND column_name = 'display_order'
+  ) THEN
+    EXECUTE 'CREATE INDEX IF NOT EXISTS idx_certifiable_elements_display_order ON public.certifiable_elements(display_order)';
+  END IF;
+END $$;
 
 -- Checklist items table indexes
 CREATE INDEX IF NOT EXISTS idx_checklist_items_project_id ON public.checklist_items(project_id);
@@ -41,7 +53,19 @@ CREATE INDEX IF NOT EXISTS idx_checklist_items_project_category ON public.checkl
 CREATE INDEX IF NOT EXISTS idx_checklist_items_completed ON public.checklist_items(completed);
 CREATE INDEX IF NOT EXISTS idx_checklist_items_hazard_id ON public.checklist_items(hazard_id);
 CREATE INDEX IF NOT EXISTS idx_checklist_items_requirement_id ON public.checklist_items(requirement_id);
-CREATE INDEX IF NOT EXISTS idx_checklist_items_display_order ON public.checklist_items(display_order);
+
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'checklist_items'
+      AND column_name = 'display_order'
+  ) THEN
+    EXECUTE 'CREATE INDEX IF NOT EXISTS idx_checklist_items_display_order ON public.checklist_items(display_order)';
+  END IF;
+END $$;
 
 -- Checklist approvals table indexes
 CREATE INDEX IF NOT EXISTS idx_checklist_approvals_project_id ON public.checklist_approvals(project_id);
