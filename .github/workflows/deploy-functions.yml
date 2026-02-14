@@ -20,6 +20,13 @@ jobs:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
       SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+      STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+      STRIPE_STARTER_PRICE_ID: ${{ secrets.STRIPE_STARTER_PRICE_ID }}
+      STRIPE_PROFESSIONAL_PRICE_ID: ${{ secrets.STRIPE_PROFESSIONAL_PRICE_ID }}
+      STRIPE_ENTERPRISE_PRICE_ID: ${{ secrets.STRIPE_ENTERPRISE_PRICE_ID }}
+      PLATFORM_DATABASE_URL: ${{ secrets.PLATFORM_DATABASE_URL }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,8 +39,27 @@ jobs:
       - name: Link Supabase project
         run: supabase link --project-ref "$SUPABASE_PROJECT_ID" --password "$SUPABASE_DB_PASSWORD"
 
+      - name: Sync Supabase function secrets
+        run: |
+          set -euo pipefail
+
+          if [ -z "${OPENAI_API_KEY:-}" ]; then
+            echo "Missing required GitHub secret: OPENAI_API_KEY"
+            exit 1
+          fi
+
+          args=("OPENAI_API_KEY=${OPENAI_API_KEY}")
+          [ -n "${STRIPE_SECRET_KEY:-}" ] && args+=("STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}")
+          [ -n "${STRIPE_WEBHOOK_SECRET:-}" ] && args+=("STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}")
+          [ -n "${STRIPE_STARTER_PRICE_ID:-}" ] && args+=("STRIPE_STARTER_PRICE_ID=${STRIPE_STARTER_PRICE_ID}")
+          [ -n "${STRIPE_PROFESSIONAL_PRICE_ID:-}" ] && args+=("STRIPE_PROFESSIONAL_PRICE_ID=${STRIPE_PROFESSIONAL_PRICE_ID}")
+          [ -n "${STRIPE_ENTERPRISE_PRICE_ID:-}" ] && args+=("STRIPE_ENTERPRISE_PRICE_ID=${STRIPE_ENTERPRISE_PRICE_ID}")
+          [ -n "${PLATFORM_DATABASE_URL:-}" ] && args+=("PLATFORM_DATABASE_URL=${PLATFORM_DATABASE_URL}")
+
+          supabase secrets set --project-ref "$SUPABASE_PROJECT_ID" "${args[@]}"
+
       - name: Apply database migrations
-        run: supabase db push
+        run: supabase db push --yes
 
       - name: Deploy functions
         run: supabase functions deploy --project-ref "$SUPABASE_PROJECT_ID"
